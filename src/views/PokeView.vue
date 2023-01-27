@@ -1,10 +1,14 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
 import {useGetData} from '@/composables/getData' 
+import {useFavoritosStore} from '@/store/favoritos'
+
 //para acceder al params
 const route = useRoute();
 const router = useRouter();
+const useFavoritos = useFavoritosStore();
 
+const {add} = useFavoritos;
 
 const {data , getData, error, loading} = useGetData();
 
@@ -22,8 +26,9 @@ getData(`https://pokeapi.co/api/v2/pokemon/${route.params.name}`);
         {{ error }}
     </div>
     <div v-if="data">
-        <h1>Poke Name:{{ $route.params.name }}</h1>
         <img :src="data.sprites?.front_default" alt="">
+        <h1>Poke Name:{{ $route.params.name }}</h1>
+        <button class="btn btn-primary mb-2" @click="add(data)">Agregar Favoritos</button>
     </div>
     <h1 v-else>No existe el pokemon</h1>
     <button @click="back()" class="btn btn-outline-primary">Back</button>
